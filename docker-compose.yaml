@@ -1,0 +1,43 @@
+# version: '3.9'
+
+# services:
+#   cosmosdb:
+#     image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
+#     ports:
+#       - "8081:8081"
+#       - "8900:8900"
+#       - "8901:8901"
+#       - "10250:10250"
+#     environment:
+#       - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
+#       - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
+#     volumes:
+#       - cosmosdbdata:/var/lib/cosmosdb/data
+#       - cosmosdblogs:/var/lib/cosmosdb/logs
+
+# volumes:
+#   cosmosdbdata:
+#   cosmosdblogs:
+
+version: '3.9'
+
+services:
+  cosmosdb:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
+    ports:
+      - "8081:8081"
+      - "8900:8900"
+      - "8901:8901"
+      - "10250:10250"
+      - "8182:8182" # Add Gremlin endpoint
+    environment:
+      - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
+      - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
+      - AZURE_COSMOS_EMULATOR_ENABLE_GREMLIN_ENDPOINT=true # Enable Gremlin endpoint
+    volumes:
+      - cosmosdbdata:/var/lib/cosmosdb/data
+      - cosmosdblogs:/var/lib/cosmosdb/logs
+
+volumes:
+  cosmosdbdata:
+  cosmosdblogs:
