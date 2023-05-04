@@ -1,43 +1,29 @@
-# version: '3.9'
-
-# services:
-#   cosmosdb:
-#     image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
-#     ports:
-#       - "8081:8081"
-#       - "8900:8900"
-#       - "8901:8901"
-#       - "10250:10250"
-#     environment:
-#       - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
-#       - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
-#     volumes:
-#       - cosmosdbdata:/var/lib/cosmosdb/data
-#       - cosmosdblogs:/var/lib/cosmosdb/logs
-
-# volumes:
-#   cosmosdbdata:
-#   cosmosdblogs:
-
-version: '3.9'
+version: '3'
 
 services:
-  cosmosdb:
-    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
-    ports:
-      - "8081:8081"
-      - "8900:8900"
-      - "8901:8901"
-      - "10250:10250"
-      - "8182:8182" # Add Gremlin endpoint
-    environment:
-      - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
-      - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
-      - AZURE_COSMOS_EMULATOR_ENABLE_GREMLIN_ENDPOINT=true # Enable Gremlin endpoint
-    volumes:
-      - cosmosdbdata:/var/lib/cosmosdb/data
-      - cosmosdblogs:/var/lib/cosmosdb/logs
 
-volumes:
-  cosmosdbdata:
-  cosmosdblogs:
+  jupyter:
+    image: ist769/jupyter_pyspark:20210924b 
+    hostname: jupyter
+    environment:
+      - GRANT_SUDO=yes
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=SU2orange!       
+    ports:
+      - "8888:8888"
+    volumes: 
+      - ./work:/home/jovyan/work
+ 
+  couchbase:
+    image: couchbase:latest
+    hostname: couchbase
+    ports:
+      - 8091:8091
+      - 8092:8092
+      - 8093:8093
+      - 11210:11210
+    volumes:
+      - ./data:/opt/couchbase/data
+    environment:
+      - COUCHBASE_USERNAME=admin
+      - COUCHBASE_PASSWORD=password
